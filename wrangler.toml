@@ -1,0 +1,22 @@
+name = "telegram-cf-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Optional: bind a custom domain / route instead of the default *.workers.dev URL.
+# Uncomment and set your domain after you've added it to Cloudflare.
+# routes = [
+#   { pattern = "tg.yourdomain.com", custom_domain = true }
+# ]
+
+[vars]
+# Upstream Telegram API base. Change to a self-hosted Bot API server if needed.
+TELEGRAM_API_BASE = "https://api.telegram.org"
+
+# ---------------------------------------------------------------------------
+# SECRETS are NOT stored in this file. Set them once with:
+#   npx wrangler secret put BOT_TOKEN   # when set, clients may omit /bot<TOKEN>
+#   npx wrangler secret put AUTH_KEY    # when set, every request needs ?key=
+#
+# BOT_TOKEN : default bot token injected when the path has no /bot<TOKEN> prefix.
+# AUTH_KEY  : shared secret required on every request (?key= or X-Auth-Key header).
+# ---------------------------------------------------------------------------

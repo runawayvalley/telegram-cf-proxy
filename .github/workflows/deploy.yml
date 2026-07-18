@@ -1,0 +1,29 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# This workflow deploys the WORKER CODE only.
+# Secrets (BOT_TOKEN / AUTH_KEY) are NOT managed here — set them once with
+#   npx wrangler secret put BOT_TOKEN
+#   npx wrangler secret put AUTH_KEY
+# The workflow will not overwrite them on subsequent runs.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only run if a Cloudflare token secret is configured in the repo.
+    if: ${{ secrets.CF_API_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Deploy
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
