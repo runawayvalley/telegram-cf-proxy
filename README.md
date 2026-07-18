@@ -17,11 +17,11 @@ unreliable.
 
 ## 🚀 Quick start (3 steps)
 
-### 1. Create the GitHub repo + push this code
+### 1. Clone this repo
 ```bash
-gh repo create telegram-cf-proxy --public --source . --remote origin --push
+git clone https://github.com/runawayvalley/telegram-cf-proxy.git
+cd telegram-cf-proxy
 ```
-(already done if you cloned this repo)
 
 ### 2. Deploy the Worker
 **Option A — automated via Cloudflare API key/token (no `wrangler` login needed):**
