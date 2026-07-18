@@ -70,18 +70,24 @@ It calls `getMe`, then optionally `sendMessage`. If you set `AUTH_KEY`, export i
 
 ## 🔧 Configuration
 
+**All configuration is optional.** The Worker runs with zero secrets/vars set —
+clients just use the standard `https://<worker>/bot<TOKEN>/...` form and the
+proxy forwards to `https://api.telegram.org`. Each value only changes behavior;
+nothing is required.
+
 Set these **secrets** (not committed to the repo) with
 `npx wrangler secret put <NAME>`:
 
-| Secret      | Effect                                                                 |
-|-------------|------------------------------------------------------------------------|
-| `BOT_TOKEN` | When set, clients may **omit** the `/bot<TOKEN>` prefix entirely.       |
-| `AUTH_KEY`  | When set, **every** request must carry `?key=<AUTH_KEY>` (or `X-Auth-Key` header). |
+| Secret      | Required? | If **set**                                                            | If **unset** (default)                                            |
+|-------------|-----------|-----------------------------------------------------------------------|-------------------------------------------------------------------|
+| `BOT_TOKEN` | ❌ optional | Clients may **omit** the `/bot<TOKEN>` prefix entirely.               | Clients **must** include `/bot<TOKEN>` in the path (standard form).|
+| `AUTH_KEY`  | ❌ optional | **Every** request must carry `?key=<AUTH_KEY>` (or `X-Auth-Key` header). The proxy is locked down. | Proxy is **open** — anyone who knows the URL can use it. ⚠️ Don't leave public `*.workers.dev` URLs open. |
 
-Set this **var** in `wrangler.toml`:
-| Var                   | Default                       | Effect                                    |
-|-----------------------|-------------------------------|-------------------------------------------|
-| `TELEGRAM_API_BASE`   | `https://api.telegram.org`    | Upstream base URL.                        |
+Set this **var** in `wrangler.toml` (always has a value even if you delete the line):
+
+| Var                   | Default                       | Required? | Effect                                    |
+|-----------------------|-------------------------------|-----------|-------------------------------------------|
+| `TELEGRAM_API_BASE`   | `https://api.telegram.org`    | ❌ optional | Upstream base URL.                        |
 
 ### Per-request overrides (query params)
 | Param                  | Effect                                                                |
